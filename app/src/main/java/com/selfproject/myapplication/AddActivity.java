@@ -7,29 +7,44 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.Calendar;
 
 public class AddActivity extends AppCompatActivity {
 
-    EditText et_item, et_description, et_price;
+    EditText et_description, et_price, et_item;
+    Spinner et_item_2;
     Button btn_add, btn_date_picker;
 
     private DatePickerDialog datePickerDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
-
         initDatePicker();
-
         et_item = findViewById(R.id.et_item);
+        //get the spinner from the xml
+        Spinner dropdown = findViewById(R.id.et_item_2);
+
+        //create a list of items for the spinner.
+        String[] items = new String[]{"Food & Beverage", "Clothing", "Groceries & Fruits", "Shopping", "Transportation", "Housing", "Travel", "Water & Electric Bill", "Gifts/Donations", "Education", "Telephone Bill", "Baby Supplies", "Sport", "Tax", "Digital Accessories", "Insurance", "Social", "Beauty/Salons"};
+
+        //create an adapter to describe how the items are displayed, adapters are used in several places in android.
+        //There are multiple variations of this, but this is the basic variant.
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+
+        //set the spinners adapter to the previously created one.
+        dropdown.setAdapter(adapter);
+
+
+
         et_description = findViewById(R.id.et_description);
         et_price = findViewById(R.id.et_price);
         btn_add = findViewById(R.id.btn_add);
@@ -38,9 +53,11 @@ public class AddActivity extends AppCompatActivity {
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(AddActivity.this, btn_date_picker.getText().toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(AddActivity.this, dropdown.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+
+                //Toast.makeText(AddActivity.this, btn_date_picker.getText().toString(), Toast.LENGTH_LONG).show();
                 MyDatabaseHelper myDatabaseHelper = new MyDatabaseHelper(AddActivity.this);
-                myDatabaseHelper.addBudget(et_item.getText().toString().trim(), et_description.getText().toString().trim(), Integer.valueOf(et_price.getText().toString().trim()), btn_date_picker.getText().toString());
+                myDatabaseHelper.addBudget(et_item.getText().toString().trim(), et_description.getText().toString().trim(), Integer.valueOf(et_price.getText().toString().trim()), btn_date_picker.getText().toString(), dropdown.getSelectedItem().toString());
                 Intent intent = new Intent(AddActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();

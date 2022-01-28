@@ -10,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,11 +21,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     private Context context;
     Activity activity;
-    private ArrayList budget_id, budget_item, budget_description, budget_price, budget_date;
+    private ArrayList budget_id, budget_item, budget_description, budget_price, budget_date, budget_category;
 
     Animation translate_anim;
 
-    CustomAdapter(Context context, ArrayList budget_id, ArrayList budget_item, ArrayList budget_description, ArrayList budget_price, Activity activity, ArrayList budget_date){
+    CustomAdapter(Context context, ArrayList budget_id, ArrayList budget_item, ArrayList budget_description, ArrayList budget_price, Activity activity, ArrayList budget_date, ArrayList budget_category){
         this.activity = activity;
         this.context = context;
         this.budget_id = budget_id;
@@ -32,6 +33,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         this.budget_description = budget_description;
         this.budget_price = budget_price;
         this.budget_date = budget_date;
+        this.budget_category = budget_category;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -64,7 +66,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.tv_id.setText(String.valueOf(budget_id.get(position)));
         holder.tv_item.setText(String.valueOf(budget_item.get(position)));
         holder.tv_description.setText(String.valueOf(budget_description.get(position)));
-        holder.tv_price.setText(String.valueOf(budget_price.get(position)));
+        holder.tv_price.setText("RM " + String.valueOf(budget_price.get(position)));
         holder.tv_date.setText(String.valueOf(budget_date.get(position)));
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +77,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 intent.putExtra("budget_description", String.valueOf(budget_description.get(position)));
                 intent.putExtra("budget_price", String.valueOf(budget_price.get(position)));
                 intent.putExtra("budget_date", String.valueOf(budget_date.get(position)));
+                intent.putExtra("budget_category", String.valueOf(budget_category.get(position)));
+
                 activity.startActivityForResult(intent, 1);
                 context.startActivity(intent);
             }

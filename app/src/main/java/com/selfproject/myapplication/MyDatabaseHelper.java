@@ -19,6 +19,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_NAME = "my_budget_table";
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_ITEM = "budget_item";
+    private static final String COLUMN_CATEGORY = "budget_category";
     private static final String COLUMN_DESCRIPTION = "budget_description";
     private static final String COLUMN_PRICE = "budget_price";
     private static final String COLUMN_DATE = "budget_date";
@@ -31,7 +32,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String query = "CREATE TABLE " + TABLE_NAME + " ("+ COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COLUMN_ITEM+ " TEXT, "+COLUMN_PRICE + " REAL, "+COLUMN_DESCRIPTION+ " TEXT, " + COLUMN_DATE+" TEXT);";
+        String query = "CREATE TABLE " + TABLE_NAME + " ("+ COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COLUMN_ITEM+ " TEXT, "+COLUMN_PRICE + " REAL, "+COLUMN_DESCRIPTION+ " TEXT, " + COLUMN_DATE+" TEXT, " + COLUMN_CATEGORY+ " TEXT);";
         sqLiteDatabase.execSQL(query);
     }
 
@@ -41,7 +42,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    void addBudget(String budget_item, String budget_description, double budget_price, String budget_date){
+    void addBudget(String budget_item, String budget_description, double budget_price, String budget_date, String budget_category){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -49,6 +50,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_DESCRIPTION, budget_description);
         cv.put(COLUMN_PRICE, budget_price);
         cv.put(COLUMN_DATE, budget_date);
+        cv.put(COLUMN_CATEGORY, budget_category);
 
         long result = db.insert(TABLE_NAME, null, cv);
         if (result == -1){
@@ -58,13 +60,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    void updateData(String item, String description, String price, String row_id, String date){
+    void updateData(String item, String description, String price, String row_id, String date, String budget_category){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_ITEM, item);
         contentValues.put(COLUMN_DESCRIPTION, description);
         contentValues.put(COLUMN_PRICE, price);
         contentValues.put(COLUMN_DATE, date);
+        contentValues.put(COLUMN_CATEGORY, budget_category);
 
         long result = db.update(TABLE_NAME, contentValues, "_id=?", new String[]{row_id});
         if(result == -1){
